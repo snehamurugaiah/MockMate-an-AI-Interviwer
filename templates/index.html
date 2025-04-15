@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Interview System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        .action-button {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .action-button:hover {
+            background-color: #0056b3;
+        }
+        .audio-container {
+            margin-top: 5px;
+        }
+        .logout {
+            float: right;
+            margin-top: -50px;
+            margin-right: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Mock Interview System</h1>
+        <a href="{{ url_for('logout') }}" class="logout action-button">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+        <!-- Add a link to the Resume Upload page -->
+        <a href="{{ url_for('upload_resume') }}" class="action-button">
+            <i class="fas fa-upload"></i> Upload Resume
+        </a>
+    </header>
+
+    <section class="questions">
+        <h2>Data Science Questions</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Question</th>
+                    <th>Difficulty</th>
+                    <th>Actions</th>
+                    <th>Confidence Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for question in ds_questions %}
+                <tr>
+                    <td>{{ question[1] }}</td>
+                    <td>{{ question[2] }}</td>
+                    <td>
+                        <div class="actions">
+                            <button class="action-button" onclick="speakText('{{ question[1] }}')">
+                                <i class="fas fa-volume-up"></i> Read
+                            </button>
+                            <button class="action-button" onclick="startRecording({{ loop.index }})">
+                                <i class="fas fa-microphone"></i> Record
+                            </button>
+                            <button class="action-button" onclick="stopRecording({{ loop.index }})">
+                                <i class="fas fa-stop"></i> Stop
+                            </button>
+                            <button class="action-button" onclick="playRecording({{ loop.index }})">
+                                <i class="fas fa-play"></i> Play
+                            </button>
+                            <button class="action-button" onclick="submitAudio({{ loop.index }})">
+                                <i class="fas fa-upload"></i> Submit
+                            </button>
+                        </div>
+                        <div class="audio-container">
+                            <audio id="audio_{{ loop.index }}" controls style="display:none;"></audio>
+                        </div>
+                        <input type="hidden" id="question_id_{{ loop.index }}" value="{{ question[0] }}">
+                    </td>
+                    <td><p id="confidence_{{ loop.index }}"></p></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+
+
+    <script>
+        let mediaRecorders = {};
+        let audioChunks = {};
+        let audioBlobs = {};
+
+        function speakText(text) {
+            let speech = new SpeechSynthesisUtterance(text);
+            speech.lang = "en-US";
+            window.speechSynthesis.speak(speech);
+        }
+
+        function startRecording(id) {
+            if (mediaRecorders[id] && mediaRecorders[id].state === "recording") {
+                alert("Already recording!");
+                return;
+            }
+
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(stream => {
+                    const mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorders[id] = mediaRecorder;
+                    audioChunks[id] = [];
+
+                    mediaRecorder.ondataavailable = event => {
+                        audioChunks[id].push(event.data);
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks[id], { type: 'audio/wav' });
+                        audioBlobs[id] = audioBlob;
+                        const audioURL = URL.createObjectURL(audioBlob);
+                        document.getElementById(`audio_${id}`).src = audioURL;
+                        document.getElementById(`audio_${id}`).style.display = "block";
+                        stream.getTracks().forEach(track => track.stop());
+                    };
+
+                    mediaRecorder.start();
+                    alert("Recording started!");
+                })
+                .catch(error => alert("Error accessing microphone: " + error));
+        }
+
+        function stopRecording(id) {
+            if (!mediaRecorders[id] || mediaRecorders[id].state !== "recording") {
+                alert("No recording in progress!");
+                return;
+            }
+
+            mediaRecorders[id].stop();
+            alert("Recording stopped!");
+        }
+
+        function playRecording(id) {
+            let audioElement = document.getElementById(`audio_${id}`);
+            if (audioElement.src) {
+                audioElement.play();
+            } else {
+                alert("No recorded audio available!");
+            }
+        }
+
+        function submitAudio(id) {
+            if (!audioBlobs[id]) {
+                alert("Please record an answer first!");
+                return;
+            }
+
+            const questionId = document.getElementById(`question_id_${id}`).value;
+            const formData = new FormData();
+            formData.append("audio_data", audioBlobs[id], `answer_${id}.wav`);
+            formData.append("question_id", questionId);
+
+            fetch("/submit_answer", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert("Error: " + data.error);
+                } else {
+                    document.getElementById(`confidence_${id}`).innerText =
+                        `Confidence Score: ${data.confidence_score}%`;
+                }
+            })
+            .catch(error => alert("Error submitting audio: " + error));
+        }
+    </script>
+<script>
+    function submitAudio(id) {
+        if (!audioBlobs[id]) {
+            alert("Please record an answer first!");
+            return;
+        }
+
+        const questionId = document.getElementById(`question_id_${id}`).value;
+        const confidenceScore = document.getElementById(`confidence_${id}`).innerText.replace("Confidence Score: ", "").replace("%", "");
+
+        const formData = new FormData();
+        formData.append("audio_data", audioBlobs[id], `answer_${id}.wav`);
+        formData.append("question_id", questionId);
+        formData.append("confidence_score", confidenceScore);  // Adding the confidence score
+
+        fetch("/submit_answer", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert("Error: " + data.error);
+            } else {
+                document.getElementById(`confidence_${id}`).innerText =
+                    `Confidence Score: ${data.confidence_score}%`;
+            }
+        })
+        .catch(error => alert("Error submitting audio: " + error));
+    }
+</script>
+<form action="{{ url_for('report') }}" method="get">
+    <button type="submit">Finish Interview & View Report</button>
+</form>
+
+</body>
+</html>
