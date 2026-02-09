@@ -1,121 +1,73 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>Login - Mock Interview System</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>MockMate - An Interview Practice Platform</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            height: 100vh;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
             display: flex;
+            align-items: center;
             justify-content: center;
-            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-
-        .login-box {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(12px);
+        form {
+            background-color: white;
+            padding: 30px;
             border-radius: 15px;
-            padding: 45px 35px;
-            width: 100%;
-            max-width: 420px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            width: 320px;
             text-align: center;
-            color: #fff;
         }
-
-        .login-box h2 {
-            margin-bottom: 30px;
-            font-size: 26px;
-            font-weight: 600;
+        h1 {
+            color: #2575fc;
+            margin-bottom: 10px;
         }
-
-        .input-group {
-            position: relative;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
+        img.logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 15px;
         }
-
-        .input-group i {
-            position: absolute;
-            left: 15px;
-            font-size: 16px;
-            color: #ccc;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 12px 15px 12px 42px;
-            border-radius: 10px;
-            border: none;
-            font-size: 15px;
-            box-sizing: border-box;
-        }
-
-        .input-group input:focus {
-            outline: none;
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
-        }
-
-        .login-box button {
+        input {
             width: 100%;
             padding: 12px;
-            border: none;
-            background-color: #28a745;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #2575fc;
             color: white;
-            font-size: 16px;
-            font-weight: 500;
+            padding: 12px;
+            width: 100%;
+            border: none;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            font-size: 16px;
+            margin-top: 10px;
         }
-
-        .login-box button:hover {
-            background-color: #218838;
+        button:hover {
+            background-color: #1b5bbf;
         }
-
-        .login-box .links {
-            margin-top: 18px;
-            font-size: 14px;
-        }
-
-        .login-box .links a {
-            color: #ddd;
-            text-decoration: underline;
-            margin: 0 6px;
-        }
-
-        @media (max-width: 480px) {
-            .login-box {
-                padding: 30px 20px;
-            }
+        a {
+            text-decoration: none;
+            color: #2575fc;
+            display: block;
+            margin-top: 12px;
         }
     </style>
 </head>
 <body>
-    <div class="login-box">
-        <h2>Login to Mock Interview System</h2>
-        <form method="POST">
-            <div class="input-group">
-                <i class="fas fa-user"></i>
-                <input type="text" name="username" placeholder="Username" required>
-            </div>
-            <div class="input-group">
-                <i class="fas fa-lock"></i>
-                <input type="password" name="password" placeholder="Password" required>
-            </div>
-            <button type="submit">Login</button>
-        </form>
-        <div class="links">
-            <a href="#">Forgot Password?</a> | <a href="#">Sign Up</a>
-        </div>
-    </div>
+    <form method="POST">
+        <img src="static/robot.png" alt="Robot Logo" class="logo">
+        <h1>MockMate</h1>
+        <p>An Interview Practice Platform</p>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+        <a href="/register">Don't have an account? Register</a>
+    </form>
 </body>
 </html>
