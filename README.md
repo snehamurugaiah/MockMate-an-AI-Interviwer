@@ -1,49 +1,139 @@
-# MockMate-an-AI-Interviwer
-# **🎤 Mock Interview System with Resume Analysis**
-## **🌟 Overview**
-This is a Flask-based mock interview system that helps users practice interview questions, submit voice responses, and receive confidence scores. It also supports resume uploading and automatic text feature extraction from resumes.
+🎯 MockMate: AI-Based Mock Interview Preparation System
+📌 Overview
+MockMate is an AI-powered mock interview preparation platform designed to simulate real-world interview environments. It helps candidates enhance their communication skills, technical knowledge, emotional intelligence, and confidence through intelligent resume parsing, adaptive question generation, emotion analysis, and detailed performance feedback.
 
-## **✨ Features**
-🔐 Login system with session management
+MockMate acts as a virtual interviewer, enabling users to practice interviews anytime with AI-driven evaluation and personalized improvement recommendations.
 
-📄 Resume upload and text extraction from PDF/DOCX files
+🚀 Key Features
+AI-driven interview question generation based on job role and resume content
+Resume parsing and skill extraction using NLP techniques
+Voice-based interview simulation with speech-to-text conversion
+Facial emotion and speech-based confidence analysis
+Dynamic performance scoring system
+Personalized feedback and improvement recommendations
+🧠 System Architecture
+User Authentication & Profile Management
 
-🧠 Skill, project, certification, and experience detection from resumes
+Resume Upload & NLP-Based Parsing Module
 
-🎙️ Audio recording and confidence scoring for interview questions
+Dynamic Question Generation Engine
 
-💬 Emotion recognition pipeline 
+Interview Simulation Interface (Audio / Video)
 
-🎛️ Randomized question fetching from PostgreSQL database
+Analysis Module
 
-📊 Performance reporting and PDF report download
+Facial Emotion Detection
+Speech Confidence Estimation
+NLP-Based Answer Matching
+Performance Evaluation & Report Generation
 
-## **📁 Project Structure**
+🛠 Technologies Used
+Frontend
+HTML
+CSS
+JavaScript
+React (optional for enhanced UI)
+Backend
+Python (Flask / Django)
+AI & Machine Learning
+CNN – Facial emotion recognition
+DNN – Speech confidence analysis
+Transformers (BERT / DistilBERT) – Resume parsing and answer evaluation
+Database
+PostgreSQL / MySQL
+APIs & Libraries
+Speech Recognition API (Google Speech / OpenAI Whisper)
+Text-to-Speech (TTS) API
+OpenCV
+MediaPipe
+HuggingFace Transformers
+📂 Datasets Used
+1️⃣ Resume Parsing & Skill Extraction
+Resume Dataset (Kaggle)
+Indeed Job Descriptions Dataset
+O*NET / ESCO Open Skills Dataset
+2️⃣ Interview Question Generation
+Interview Questions Dataset (Kaggle)
+Glassdoor Interview Questions Dataset
+Custom Curated Interview Question Bank
+3️⃣ Emotion Detection
+FER-2013 Dataset
+CK+ (Cohn-Kanade Expression Dataset)
+RAF-DB (Real-world Affective Faces Database)
+4️⃣ Speech & Confidence Analysis
+RAVDESS (Ryerson Audio-Visual Database of Emotional Speech and Song)
+CREMA-D (Crowd-Sourced Emotional Multimodal Actors Dataset)
+LibriSpeech Dataset
+5️⃣ NLP Answer Evaluation
+SQuAD Dataset
+STS Benchmark (Semantic Textual Similarity Dataset)
+Custom Interview Answer Corpus
+⚙️ Installation & Setup
+# Clone the repository
+git clone https://github.com/your-repo/MockMate.git
+cd MockMate
 
-<pre> ## 📁 Project Structure mock-interview-system/ │ ├── app.py # Main Flask application ├── requirements.txt # Project dependencies ├── README.md # Project documentation │ ├── templates/ # HTML templates for UI │ ├── login.html │ ├── upload_resume.html │ ├── index.html │ └── report.html │ ├── static/ # Static assets like uploads & recordings │ ├── uploads/ # Uploaded resumes (PDF/DOCX) │ └── recordings/ # User audio responses </pre>
+# Create virtual environment
+python -m venv env
+source env/bin/activate   # On Windows: env\Scripts\activate
 
-## 🚀 Technologies Used
+# Install dependencies
+pip install -r requirements.txt
 
-| Technology     | Purpose                                                                 |
-|----------------|-------------------------------------------------------------------------|
-| Flask          | Web framework to build backend and serve frontend                       |
-| PostgreSQL     | Relational database to store interview questions                        |
-| Transformers   | NLP models for speech recognition and emotion detection                 |
-|               | - `openai/whisper-tiny.en`: ASR (Automatic Speech Recognition)           |
-|               | - `j-hartmann/emotion-english-distilroberta-base`: Emotion classification|
-| Pytesseract    | OCR engine for image-based text extraction (optional)                   |
-| PyPDF2         | Extract text from PDF resumes                                           |
-| python-docx    | Extract text from DOCX resumes                                          |
-| FPDF           | Generate downloadable PDF interview reports                             |
-| HTML/CSS/JS    | Frontend for UI, recording, and interactions                            |
+# Run the application
+python app.py
+🔄 How It Works
+1. Upload Resume
+The system extracts skills, experience, and keywords using NLP models.
+2. Select Job Role
+Resume data is mapped against role-specific requirements.
+3. Start Mock Interview
+AI dynamically generates and asks interview questions via voice.
+4. Analyze Responses
+Speech relevance and fluency analysis
+Facial expression and emotional stability detection
+Confidence evaluation based on tone, pitch, and pauses
+5. Generate Performance Report
+Overall performance score
+Identified strengths and weaknesses
+Personalized improvement suggestions
+🖼️ Output Screens / Results
+🔐 User Login & Dashboard
+User Login and Dashboard
 
+Figure 1: Secure login page and user dashboard showing interview history.
 
+📄 Resume Upload & Skill Extraction
+Resume Parsing Output
+<img src="C:\Users\ASUS\OneDrive\Pictures\Screenshots" width="500">
 
-# **OUTPUTS**
-![Screenshot 2025-04-14 213020](https://github.com/user-attachments/assets/832fe67e-90c6-451d-96d4-05893ed15efc)
-![Screenshot 2025-04-14 213050](https://github.com/user-attachments/assets/507a91d4-765f-4f1d-8044-0a52efeb43f4)
-![Screenshot 2025-04-14 213147](https://github.com/user-attachments/assets/62b6fb6e-d052-47e6-8bec-0e56c0fd20e9)
-![Screenshot 2025-04-14 213155](https://github.com/user-attachments/assets/2bf7075c-dccb-4742-b81d-d73d5e26bc98)
+Figure 2: Resume upload interface with extracted skills and role relevance score.
 
+❓ AI-Generated Interview Questions
+Question Generation
 
+Figure 3: Dynamically generated interview questions based on selected job role.
 
+📊 Performance Report & Feedback
+Performance Report
+
+Figure 4: Detailed performance report including scores, strengths, weaknesses, and improvement suggestions.
+
+🧩 Core Modules
+📄 Resume Parser
+Keyword extraction
+Skill and experience identification
+Role relevance analysis
+❓ Question Generator
+Transformer-based models
+Real-time difficulty adjustment
+🎭 Emotion & Confidence Analyzer
+CNN-based facial emotion recognition
+Speech modulation analysis (pitch, speed, hesitation)
+📊 Feedback & Evaluation Engine
+Multi-parameter scoring system
+Personalized improvement recommendations
+🎯 Use Cases
+Job seekers preparing for technical and HR interviews
+College placement training and assessment
+Corporate candidate readiness evaluation
